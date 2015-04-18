@@ -1,0 +1,5 @@
+{{if eq .Url ""}}
+{{.Name}}
+{{else}}
+<a href="{{.Url}}">{{.Name}}</a>
+{{end}}

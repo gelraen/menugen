@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{{template "head.tmpl"}}
+	<title>Menu</title>
+</head>
+<body>
+	<div class="container">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>День тижня</th>
+				<th>Сніданок</th>
+				<th>Вечеря</th>
+			</tr>
+		</thead>
+		{{range $day, $menu := .}}
+			<tr>
+				<th>{{dayname $day}}</th>
+				<td class="td-hover">
+					<span id="{{printf "b-%d" $day}}">{{template "breakfast.tmpl" $menu.Breakfast}}</span>
+					<button class="btn btn-link btn-xs pull-right" onclick="genBreakfast('{{printf "b-%d" $day}}')"><span class="glyphicon glyphicon-refresh"></span></button>
+				</td>
+				<td class="td-hover">
+					<span id="{{printf "d-%d" $day}}">{{template "dinner.tmpl" $menu.Dinner}}</span>
+					<button class="btn btn-link btn-xs pull-right" onclick="genDinner('{{printf "d-%d" $day}}')"><span class="glyphicon glyphicon-refresh"></span></button>
+				</td>
+			</tr>
+		{{end}}
+	</table>
+	</div>
+	{{template "footer.tmpl"}}
+</body>
+</html>

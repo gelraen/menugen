@@ -1,0 +1,5 @@
+{{if len . | eq 1}}
+{{template "dish.tmpl" (index . 0)}}
+{{else}}
+{{template "dish.tmpl" (index . 0)}} + {{template "dish.tmpl" (index . 1)}}
+{{end}}

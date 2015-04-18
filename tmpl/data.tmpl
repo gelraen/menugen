@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{{template "head.tmpl"}}
+	<title>Menu</title>
+</head>
+<body>
+	<div class="container">
+	<a href="/dump">Dump</a><br />
+	<form action="/restore" method="post" enctype="multipart/form-data">
+	<input type="file" name="dump">
+	<input type="submit" value="Restore">
+	</form>
+	</div>
+	{{template "footer.tmpl"}}
+</body>
+</html>

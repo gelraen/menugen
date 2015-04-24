@@ -49,6 +49,7 @@ func loadTemplates(dir string) error {
 		filepath.Join(dir, "head.tmpl"),
 		filepath.Join(dir, "footer.tmpl"),
 		filepath.Join(dir, "breakfast.tmpl"),
+		filepath.Join(dir, "lunch.tmpl"),
 		filepath.Join(dir, "dinner.tmpl"),
 		filepath.Join(dir, "dish.tmpl"),
 		filepath.Join(dir, "data.tmpl"))
@@ -62,6 +63,7 @@ func makeMenu(dishes []data.Dish) (WeekMenu, error) {
 	for day := Mon; day <= Sun; day++ {
 		menu[day] = DayMenu{
 			Breakfast: genBreakfast(byType),
+			Lunch:     genLunch(byType),
 			Dinner:    genDinner(byType),
 		}
 	}
@@ -108,6 +110,24 @@ func generateBreakfast(w http.ResponseWriter, req *http.Request) {
 	}
 	if err := menuTmpl.ExecuteTemplate(w, "breakfast.tmpl", genBreakfast(makeDishMap(dishes))); err != nil {
 		log.Printf("Failed to render menu: %s", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+func generateLunch(w http.ResponseWriter, req *http.Request) {
+	if d == nil {
+		log.Print("d == nil")
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	dishes, err := d.Dishes()
+	if err != nil {
+		log.Printf("Failed to get dishes: %s", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := menuTmpl.ExecuteTemplate(w, "lunch.tmpl", genLunch(makeDishMap(dishes))); err != nil {
+		log.Print("Failed to render menu: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -226,6 +246,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*staticDir))))
 	http.HandleFunc("/", generateMenu)
 	http.HandleFunc("/gen/breakfast", generateBreakfast)
+	http.HandleFunc("/gen/lunch", generateLunch)
 	http.HandleFunc("/gen/dinner", generateDinner)
 	http.HandleFunc("/dump", dump)
 	http.HandleFunc("/restore", restore)

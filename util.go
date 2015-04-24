@@ -8,6 +8,7 @@ import (
 
 const (
 	kBreakfast = "breakfast"
+	kLunch     = "lunch"
 	kMeat      = "meat"
 	kGarnish   = "garnish"
 	kMain      = "main"
@@ -27,6 +28,7 @@ const (
 
 type DayMenu struct {
 	Breakfast data.Dish
+	Lunch     data.Dish
 	Dinner    []data.Dish
 }
 
@@ -46,6 +48,9 @@ func genRandomOfType(d map[string][]data.Dish, t string) data.Dish {
 
 func genBreakfast(d map[string][]data.Dish) data.Dish {
 	return genRandomOfType(d, kBreakfast)
+}
+func genLunch(d map[string][]data.Dish) data.Dish {
+	return genRandomOfType(d, kLunch)
 }
 
 func genDinner(d map[string][]data.Dish) []data.Dish {

@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"time"
+	"strconv"
 
 	"./data"
 )
@@ -63,7 +64,7 @@ func makeMenu(dishes []data.Dish) (WeekMenu, error) {
 	for day := Mon; day <= Sun; day++ {
 		menu[day] = DayMenu{
 			Breakfast: genBreakfast(byType),
-			Lunch:     genLunch(byType),
+			Lunch:     genLunch(byType, day),
 			Dinner:    genDinner(byType),
 		}
 	}
@@ -126,7 +127,13 @@ func generateLunch(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := menuTmpl.ExecuteTemplate(w, "lunch.tmpl", genLunch(makeDishMap(dishes))); err != nil {
+	day, err := strconv.Atoi(req.FormValue("day"))
+	if err != nil {
+		log.Printf("Failed to get day: %s", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := menuTmpl.ExecuteTemplate(w, "lunch.tmpl", genLunch(makeDishMap(dishes),Weekday(day))); err != nil {
 		log.Print("Failed to render menu: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

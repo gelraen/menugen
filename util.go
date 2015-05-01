@@ -28,7 +28,7 @@ const (
 
 type DayMenu struct {
 	Breakfast data.Dish
-	Lunch     data.Dish
+	Lunch     []data.Dish
 	Dinner    []data.Dish
 }
 
@@ -49,8 +49,11 @@ func genRandomOfType(d map[string][]data.Dish, t string) data.Dish {
 func genBreakfast(d map[string][]data.Dish) data.Dish {
 	return genRandomOfType(d, kBreakfast)
 }
-func genLunch(d map[string][]data.Dish) data.Dish {
-	return genRandomOfType(d, kLunch)
+func genLunch(d map[string][]data.Dish, day Weekday) []data.Dish {
+	if day == Sat || day == Sun {
+		return genDinner(d)
+	}
+	return []data.Dish{genRandomOfType(d, kLunch)}
 }
 
 func genDinner(d map[string][]data.Dish) []data.Dish {

@@ -9,8 +9,8 @@ function genBreakfast(t) {
 	replaceContent(document.getElementById(t), "/gen/breakfast")
 }
 
-function genLunch(t) {
-	replaceContent(document.getElementById(t), "/gen/lunch")
+function genLunch(t, day) {
+	replaceContent(document.getElementById(t), "/gen/lunch?day=" + day)
 }
 
 function genDinner(t) {
